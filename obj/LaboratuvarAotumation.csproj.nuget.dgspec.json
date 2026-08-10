@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj": {}
+    "c:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj": {}
   },
   "projects": {
-    "C:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj": {
+    "c:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj",
+        "projectUniqueName": "c:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj",
         "projectName": "LaboratuvarAotumation",
-        "projectPath": "C:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj",
+        "projectPath": "c:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj",
         "packagesPath": "C:\\Users\\salih\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\obj\\",
+        "outputPath": "c:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\DevExpress 25.1\\Components\\Offline Packages",
@@ -53,6 +53,10 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.2.0, )"
+            },
             "MySql.Data": {
               "target": "Package",
               "version": "[26.7.0, )"
