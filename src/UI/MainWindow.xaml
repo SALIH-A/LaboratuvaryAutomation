@@ -1,0 +1,960 @@
+<Window x:Class="LDMAS.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="LDMAS — Laboratory Data Management and Automation System"
+        Height="768" Width="1280"
+        MinHeight="600" MinWidth="900"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="CanResizeWithGrip">
+
+    <!-- ================================================================== -->
+    <!-- WINDOW RESOURCES — Design Tokens, Colors, Styles                   -->
+    <!-- ================================================================== -->
+    <Window.Resources>
+
+        <!-- ============================================================== -->
+        <!-- COLOR PALETTE — Clinical / Academic Laboratory Theme           -->
+        <!-- ============================================================== -->
+        <!-- Primary:   Deep navy (#0F1B2D) — authority and professionalism -->
+        <!-- Surface:   Slate blue (#1A2942) — sidebar and panels           -->
+        <!-- Accent:    Teal-cyan (#00B4D8) — interactive elements          -->
+        <!-- Success:   Emerald (#10B981)                                    -->
+        <!-- Warning:   Amber (#F59E0B)                                      -->
+        <!-- Danger:    Rose (#EF4444)                                        -->
+        <!-- Text:      Cool white (#E2E8F0) on dark backgrounds            -->
+        <!-- ============================================================== -->
+
+        <!-- Base Colors -->
+        <SolidColorBrush x:Key="WindowBgBrush"       Color="#0B1120"/>
+        <SolidColorBrush x:Key="SidebarBgBrush"      Color="#0F1B2D"/>
+        <SolidColorBrush x:Key="SidebarHoverBrush"    Color="#1A2942"/>
+        <SolidColorBrush x:Key="SidebarActiveBrush"   Color="#1E3A5F"/>
+        <SolidColorBrush x:Key="TopBarBgBrush"        Color="#111827"/>
+        <SolidColorBrush x:Key="ContentBgBrush"       Color="#111827"/>
+        <SolidColorBrush x:Key="CardBgBrush"          Color="#1A2332"/>
+        <SolidColorBrush x:Key="CardBorderBrush"      Color="#1E3044"/>
+
+        <!-- Accent Colors -->
+        <SolidColorBrush x:Key="AccentBrush"          Color="#00B4D8"/>
+        <SolidColorBrush x:Key="AccentHoverBrush"     Color="#0096C7"/>
+        <SolidColorBrush x:Key="SuccessBrush"         Color="#10B981"/>
+        <SolidColorBrush x:Key="WarningBrush"         Color="#F59E0B"/>
+        <SolidColorBrush x:Key="DangerBrush"          Color="#EF4444"/>
+        <SolidColorBrush x:Key="InfoBrush"            Color="#6366F1"/>
+
+        <!-- Text Colors -->
+        <SolidColorBrush x:Key="TextPrimaryBrush"     Color="#E2E8F0"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush"   Color="#94A3B8"/>
+        <SolidColorBrush x:Key="TextMutedBrush"       Color="#64748B"/>
+
+        <!-- ============================================================== -->
+        <!-- SIDEBAR NAVIGATION BUTTON STYLE                                -->
+        <!-- ============================================================== -->
+        <Style x:Key="NavButtonStyle" TargetType="Button">
+            <Setter Property="Background"          Value="Transparent"/>
+            <Setter Property="Foreground"           Value="{StaticResource TextSecondaryBrush}"/>
+            <Setter Property="BorderThickness"      Value="0"/>
+            <Setter Property="Height"               Value="48"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding"              Value="20,0,16,0"/>
+            <Setter Property="FontSize"             Value="13.5"/>
+            <Setter Property="FontWeight"           Value="Normal"/>
+            <Setter Property="Cursor"               Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="NavBorder"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="0"
+                                BorderThickness="3,0,0,0"
+                                BorderBrush="Transparent"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Left"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="NavBorder" Property="Background"
+                                        Value="{StaticResource SidebarHoverBrush}"/>
+                                <Setter Property="Foreground"
+                                        Value="{StaticResource TextPrimaryBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Active navigation button style -->
+        <Style x:Key="NavButtonActiveStyle" TargetType="Button"
+               BasedOn="{StaticResource NavButtonStyle}">
+            <Setter Property="Background"  Value="{StaticResource SidebarActiveBrush}"/>
+            <Setter Property="Foreground"  Value="{StaticResource AccentBrush}"/>
+            <Setter Property="FontWeight"  Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="NavBorder"
+                                Background="{StaticResource SidebarActiveBrush}"
+                                CornerRadius="0"
+                                BorderThickness="3,0,0,0"
+                                BorderBrush="{StaticResource AccentBrush}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Left"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ============================================================== -->
+        <!-- DASHBOARD METRIC CARD STYLE                                    -->
+        <!-- ============================================================== -->
+        <Style x:Key="MetricCardStyle" TargetType="Border">
+            <Setter Property="Background"      Value="{StaticResource CardBgBrush}"/>
+            <Setter Property="BorderBrush"      Value="{StaticResource CardBorderBrush}"/>
+            <Setter Property="BorderThickness"  Value="1"/>
+            <Setter Property="CornerRadius"     Value="12"/>
+            <Setter Property="Padding"          Value="24,20"/>
+        </Style>
+
+        <!-- ============================================================== -->
+        <!-- TOP BAR BUTTON STYLE (Window Controls)                         -->
+        <!-- ============================================================== -->
+        <Style x:Key="WindowControlButtonStyle" TargetType="Button">
+            <Setter Property="Width"            Value="46"/>
+            <Setter Property="Height"           Value="36"/>
+            <Setter Property="Background"       Value="Transparent"/>
+            <Setter Property="Foreground"        Value="{StaticResource TextSecondaryBrush}"/>
+            <Setter Property="BorderThickness"   Value="0"/>
+            <Setter Property="FontSize"          Value="14"/>
+            <Setter Property="Cursor"            Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="WinBtnBorder"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="WinBtnBorder" Property="Background"
+                                        Value="{StaticResource SidebarHoverBrush}"/>
+                                <Setter Property="Foreground"
+                                        Value="{StaticResource TextPrimaryBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Close button (red hover) -->
+        <Style x:Key="CloseButtonStyle" TargetType="Button"
+               BasedOn="{StaticResource WindowControlButtonStyle}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="CloseBtnBorder"
+                                Background="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="CloseBtnBorder" Property="Background"
+                                        Value="{StaticResource DangerBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <!-- ================================================================== -->
+    <!-- MAIN WINDOW LAYOUT                                                 -->
+    <!-- ================================================================== -->
+    <Border Background="{StaticResource WindowBgBrush}"
+            CornerRadius="8"
+            BorderBrush="#1E3044"
+            BorderThickness="1">
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!-- Sidebar -->
+                <ColumnDefinition Width="260"/>
+                <!-- Main Content -->
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <!-- Title Bar / Top Bar -->
+                <RowDefinition Height="56"/>
+                <!-- Content Area -->
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- ========================================================== -->
+            <!-- SIDEBAR — Navigation Panel (spans both rows)               -->
+            <!-- ========================================================== -->
+            <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                    Background="{StaticResource SidebarBgBrush}"
+                    CornerRadius="8,0,0,8">
+
+                <DockPanel LastChildFill="False">
+
+                    <!-- ── Brand / Logo Area ── -->
+                    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+
+                        <!-- Drag handle for borderless window -->
+                        <Border Height="56" Background="Transparent"
+                                MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        Margin="20,0,0,0">
+                                <!-- Lab Flask Icon (Unicode) -->
+                                <TextBlock Text="🔬" FontSize="22"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,10,0"/>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="LDMAS"
+                                               FontSize="17" FontWeight="Bold"
+                                               Foreground="{StaticResource TextPrimaryBrush}"/>
+                                    <TextBlock Text="Lab Data Management"
+                                               FontSize="10"
+                                               Foreground="{StaticResource TextMutedBrush}"
+                                               Margin="0,-2,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Divider -->
+                        <Border Height="1" Background="#1E3044" Margin="20,0"/>
+                    </StackPanel>
+
+                    <!-- ── Navigation Section Label ── -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="MAIN MENU"
+                               FontSize="10.5" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextMutedBrush}"
+                               Margin="24,16,0,10"
+                               />
+
+                    <!-- ── Navigation Buttons ── -->
+                    <StackPanel DockPanel.Dock="Top">
+
+                        <Button x:Name="BtnNavDashboard"
+                                Style="{StaticResource NavButtonActiveStyle}"
+                                Click="NavButton_Click" Tag="Dashboard">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📊" FontSize="16" Margin="0,0,12,0"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="Dashboard" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="BtnNavExperiments"
+                                Style="{StaticResource NavButtonStyle}"
+                                Click="NavButton_Click" Tag="Experiments">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🧪" FontSize="16" Margin="0,0,12,0"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="Experiments" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="BtnNavEquipment"
+                                Style="{StaticResource NavButtonStyle}"
+                                Click="NavButton_Click" Tag="Equipment">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="⚙️" FontSize="16" Margin="0,0,12,0"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="Equipment" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="BtnNavInventory"
+                                Style="{StaticResource NavButtonStyle}"
+                                Click="NavButton_Click" Tag="Inventory">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📦" FontSize="16" Margin="0,0,12,0"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="Inventory" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                    </StackPanel>
+
+                    <!-- ── Reports / Admin Section ── -->
+                    <TextBlock DockPanel.Dock="Top"
+                               Text="REPORTS &amp; ADMIN"
+                               FontSize="10.5" FontWeight="SemiBold"
+                               Foreground="{StaticResource TextMutedBrush}"
+                               Margin="24,28,0,10"/>
+
+                    <StackPanel DockPanel.Dock="Top">
+
+                        <Button x:Name="BtnNavReports"
+                                Style="{StaticResource NavButtonStyle}"
+                                Click="NavButton_Click" Tag="Reports">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="📋" FontSize="16" Margin="0,0,12,0"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="Reports" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="BtnNavAuditTrail"
+                                Style="{StaticResource NavButtonStyle}"
+                                Click="NavButton_Click" Tag="AuditTrail">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🔍" FontSize="16" Margin="0,0,12,0"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="Audit Trail" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="BtnNavUsers"
+                                Style="{StaticResource NavButtonStyle}"
+                                Click="NavButton_Click" Tag="Users">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="👥" FontSize="16" Margin="0,0,12,0"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Text="User Management" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                    </StackPanel>
+
+                    <!-- ── Bottom User Info Panel ── -->
+                    <Border DockPanel.Dock="Bottom"
+                            Background="#0A1628"
+                            CornerRadius="0,0,0,8"
+                            Padding="16,14">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- User Avatar -->
+                            <Border Grid.Column="0"
+                                    Width="36" Height="36"
+                                    CornerRadius="18"
+                                    Background="{StaticResource AccentBrush}"
+                                    Margin="0,0,12,0">
+                                <TextBlock x:Name="TxtUserInitial"
+                                           Text="SA"
+                                           FontSize="13" FontWeight="Bold"
+                                           Foreground="White"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- User Name & Role -->
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock x:Name="TxtUserFullName"
+                                           Text="System Administrator"
+                                           FontSize="12.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           TextTrimming="CharacterEllipsis"/>
+                                <TextBlock x:Name="TxtUserRole"
+                                           Text="Admin"
+                                           FontSize="10.5"
+                                           Foreground="{StaticResource AccentBrush}"/>
+                            </StackPanel>
+
+                            <!-- Logout Button -->
+                            <Button Grid.Column="2"
+                                    Content="⏻"
+                                    FontSize="16"
+                                    Width="32" Height="32"
+                                    Background="Transparent"
+                                    Foreground="{StaticResource TextMutedBrush}"
+                                    BorderThickness="0"
+                                    Cursor="Hand"
+                                    ToolTip="Logout"
+                                    Click="BtnLogout_Click"/>
+                        </Grid>
+                    </Border>
+
+                </DockPanel>
+            </Border>
+
+            <!-- ========================================================== -->
+            <!-- TOP BAR — Title + Search + Window Controls                 -->
+            <!-- ========================================================== -->
+            <Border Grid.Column="1" Grid.Row="0"
+                    Background="{StaticResource TopBarBgBrush}"
+                    BorderBrush="#1E3044"
+                    BorderThickness="0,0,0,1"
+                    CornerRadius="0,8,0,0"
+                    MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+
+                <Grid Margin="24,0,8,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Page Title -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <TextBlock x:Name="TxtPageTitle"
+                                   Text="Dashboard"
+                                   FontSize="18" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                        <TextBlock x:Name="TxtPageSubtitle"
+                                   Text="  —  System Overview"
+                                   FontSize="13"
+                                   Foreground="{StaticResource TextMutedBrush}"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Search Box -->
+                    <Border Grid.Column="1"
+                            Background="#1A2332"
+                            CornerRadius="8"
+                            Padding="12,0"
+                            Margin="40,10,40,10"
+                            MaxWidth="400"
+                            HorizontalAlignment="Center">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="🔎"
+                                       FontSize="13"
+                                       Foreground="{StaticResource TextMutedBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0"/>
+                            <TextBox Grid.Column="1"
+                                     x:Name="TxtSearch"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     Foreground="{StaticResource TextPrimaryBrush}"
+                                     FontSize="13"
+                                     VerticalAlignment="Center"
+                                     CaretBrush="{StaticResource AccentBrush}"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Status Indicator -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal"
+                                VerticalAlignment="Center" Margin="0,0,12,0">
+                        <Ellipse Width="8" Height="8"
+                                 Fill="{StaticResource SuccessBrush}"
+                                 Margin="0,0,6,0"/>
+                        <TextBlock x:Name="TxtConnectionStatus"
+                                   Text="Connected"
+                                   FontSize="11.5"
+                                   Foreground="{StaticResource TextMutedBrush}"/>
+                    </StackPanel>
+
+                    <!-- Window Controls -->
+                    <StackPanel Grid.Column="3" Orientation="Horizontal">
+                        <Button Content="─"
+                                Style="{StaticResource WindowControlButtonStyle}"
+                                Click="BtnMinimize_Click"/>
+                        <Button x:Name="BtnMaxRestore" Content="☐"
+                                Style="{StaticResource WindowControlButtonStyle}"
+                                Click="BtnMaximize_Click"/>
+                        <Button Content="✕"
+                                Style="{StaticResource CloseButtonStyle}"
+                                Click="BtnClose_Click"/>
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+
+            <!-- ========================================================== -->
+            <!-- MAIN CONTENT AREA — Dynamic Page Container                 -->
+            <!-- ========================================================== -->
+            <Border Grid.Column="1" Grid.Row="1"
+                    Background="{StaticResource ContentBgBrush}"
+                    CornerRadius="0,0,8,0">
+
+                <Grid Margin="28,24,28,20">
+
+                    <!-- ================================================== -->
+                    <!-- DASHBOARD PAGE (Default View)                      -->
+                    <!-- ================================================== -->
+                    <Grid x:Name="PageDashboard" Visibility="Visible">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Row 0: Welcome Banner -->
+                        <Border Grid.Row="0"
+                                CornerRadius="12"
+                                Padding="28,22"
+                                Margin="0,0,0,24">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#0E4D6B" Offset="0"/>
+                                    <GradientStop Color="#0B2942" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock x:Name="TxtWelcome"
+                                               Text="Welcome back, Administrator"
+                                               FontSize="20" FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextPrimaryBrush}"/>
+                                    <TextBlock Text="Here is a summary of your laboratory operations."
+                                               FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               Margin="0,4,0,0"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="1"
+                                           Text="🏛️" FontSize="48"
+                                           VerticalAlignment="Center"
+                                           Opacity="0.4"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Row 1: Metric Cards -->
+                        <UniformGrid Grid.Row="1" Columns="4" Margin="0,0,0,24">
+
+                            <!-- Card 1: Active Experiments -->
+                            <Border Style="{StaticResource MetricCardStyle}" Margin="0,0,12,0">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                        <Border Width="40" Height="40" CornerRadius="10"
+                                                Background="#0D3B66" Margin="0,0,12,0">
+                                            <TextBlock Text="🧪" FontSize="18"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="Active Experiments"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource TextSecondaryBrush}"/>
+                                            <TextBlock x:Name="TxtMetricExperiments"
+                                                       Text="12"
+                                                       FontSize="28" FontWeight="Bold"
+                                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                                       Margin="0,-2,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <TextBlock Text="▲ 3 new this week"
+                                               FontSize="11"
+                                               Foreground="{StaticResource SuccessBrush}"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Card 2: Pending Approvals -->
+                            <Border Style="{StaticResource MetricCardStyle}" Margin="6,0,6,0">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                        <Border Width="40" Height="40" CornerRadius="10"
+                                                Background="#4C2A0D" Margin="0,0,12,0">
+                                            <TextBlock Text="⏳" FontSize="18"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="Pending Approvals"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource TextSecondaryBrush}"/>
+                                            <TextBlock x:Name="TxtMetricApprovals"
+                                                       Text="5"
+                                                       FontSize="28" FontWeight="Bold"
+                                                       Foreground="{StaticResource WarningBrush}"
+                                                       Margin="0,-2,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <TextBlock Text="⚠ Requires manager review"
+                                               FontSize="11"
+                                               Foreground="{StaticResource WarningBrush}"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Card 3: Equipment Status -->
+                            <Border Style="{StaticResource MetricCardStyle}" Margin="6,0,6,0">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                        <Border Width="40" Height="40" CornerRadius="10"
+                                                Background="#0D3B2A" Margin="0,0,12,0">
+                                            <TextBlock Text="⚙️" FontSize="18"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="Active Equipment"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource TextSecondaryBrush}"/>
+                                            <TextBlock x:Name="TxtMetricEquipment"
+                                                       Text="28"
+                                                       FontSize="28" FontWeight="Bold"
+                                                       Foreground="{StaticResource SuccessBrush}"
+                                                       Margin="0,-2,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <TextBlock Text="● 2 calibrations due"
+                                               FontSize="11"
+                                               Foreground="{StaticResource AccentBrush}"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Card 4: Low Stock Items -->
+                            <Border Style="{StaticResource MetricCardStyle}" Margin="12,0,0,0">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                        <Border Width="40" Height="40" CornerRadius="10"
+                                                Background="#4C0D1A" Margin="0,0,12,0">
+                                            <TextBlock Text="📦" FontSize="18"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="Low Stock Items"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource TextSecondaryBrush}"/>
+                                            <TextBlock x:Name="TxtMetricLowStock"
+                                                       Text="3"
+                                                       FontSize="28" FontWeight="Bold"
+                                                       Foreground="{StaticResource DangerBrush}"
+                                                       Margin="0,-2,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <TextBlock Text="▼ Below minimum threshold"
+                                               FontSize="11"
+                                               Foreground="{StaticResource DangerBrush}"/>
+                                </StackPanel>
+                            </Border>
+
+                        </UniformGrid>
+
+                        <!-- Row 2: Recent Activity & Quick Actions -->
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Recent Activity Table -->
+                            <Border Grid.Column="0"
+                                    Style="{StaticResource MetricCardStyle}"
+                                    Margin="0,0,12,0">
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Top"
+                                               Text="Recent Experiments"
+                                               FontSize="15" FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextPrimaryBrush}"
+                                               Margin="0,0,0,16"/>
+
+                                    <DataGrid x:Name="DgRecentExperiments"
+                                              AutoGenerateColumns="False"
+                                              IsReadOnly="True"
+                                              HeadersVisibility="Column"
+                                              GridLinesVisibility="None"
+                                              Background="Transparent"
+                                              Foreground="{StaticResource TextSecondaryBrush}"
+                                              BorderThickness="0"
+                                              RowBackground="Transparent"
+                                              AlternatingRowBackground="#141E2E"
+                                              FontSize="12.5"
+                                              CanUserResizeRows="False">
+                                        <DataGrid.ColumnHeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
+                                                <Setter Property="FontSize" Value="11"/>
+                                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                                <Setter Property="Padding" Value="8,8"/>
+                                                <Setter Property="BorderBrush" Value="#1E3044"/>
+                                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                            </Style>
+                                        </DataGrid.ColumnHeaderStyle>
+                                        <DataGrid.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="BorderThickness" Value="0"/>
+                                                <Setter Property="Padding" Value="8,6"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="DataGridCell">
+                                                            <Border Padding="{TemplateBinding Padding}"
+                                                                    Background="{TemplateBinding Background}">
+                                                                <ContentPresenter VerticalAlignment="Center"/>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </DataGrid.CellStyle>
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="TITLE" Binding="{Binding Title}" Width="*"/>
+                                            <DataGridTextColumn Header="CATEGORY" Binding="{Binding Category}" Width="110"/>
+                                            <DataGridTextColumn Header="STATUS" Binding="{Binding Status}" Width="120"/>
+                                            <DataGridTextColumn Header="DATE" Binding="{Binding Date}" Width="100"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </DockPanel>
+                            </Border>
+
+                            <!-- Quick Actions Panel -->
+                            <Border Grid.Column="1"
+                                    Style="{StaticResource MetricCardStyle}"
+                                    Margin="12,0,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Quick Actions"
+                                               FontSize="15" FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextPrimaryBrush}"
+                                               Margin="0,0,0,16"/>
+
+                                    <!-- Quick Action Buttons -->
+                                    <Button Margin="0,0,0,10" Height="42"
+                                            Background="#0D3B66" Foreground="{StaticResource AccentBrush}"
+                                            BorderThickness="0" Cursor="Hand"
+                                            FontSize="13" FontWeight="SemiBold"
+                                            Click="BtnQuickNewExperiment_Click">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        CornerRadius="8" Padding="14,0">
+                                                    <ContentPresenter HorizontalAlignment="Left"
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="＋" FontSize="16" Margin="0,0,8,0"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBlock Text="New Experiment"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button Margin="0,0,0,10" Height="42"
+                                            Background="#0D3B2A" Foreground="{StaticResource SuccessBrush}"
+                                            BorderThickness="0" Cursor="Hand"
+                                            FontSize="13" FontWeight="SemiBold"
+                                            Click="BtnQuickAddEquipment_Click">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        CornerRadius="8" Padding="14,0">
+                                                    <ContentPresenter HorizontalAlignment="Left"
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="＋" FontSize="16" Margin="0,0,8,0"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBlock Text="Register Equipment"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button Margin="0,0,0,10" Height="42"
+                                            Background="#2D1B4E" Foreground="{StaticResource InfoBrush}"
+                                            BorderThickness="0" Cursor="Hand"
+                                            FontSize="13" FontWeight="SemiBold">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        CornerRadius="8" Padding="14,0">
+                                                    <ContentPresenter HorizontalAlignment="Left"
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="📋" FontSize="14" Margin="0,0,8,0"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBlock Text="Generate Report"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button Margin="0,0,0,0" Height="42"
+                                            Background="#4C2A0D" Foreground="{StaticResource WarningBrush}"
+                                            BorderThickness="0" Cursor="Hand"
+                                            FontSize="13" FontWeight="SemiBold">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        CornerRadius="8" Padding="14,0">
+                                                    <ContentPresenter HorizontalAlignment="Left"
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="📦" FontSize="14" Margin="0,0,8,0"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBlock Text="Check Inventory"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <!-- System Info -->
+                                    <Border Margin="0,20,0,0" Padding="12"
+                                            Background="#0A1628" CornerRadius="8">
+                                        <StackPanel>
+                                            <TextBlock Text="System Status"
+                                                       FontSize="11" FontWeight="SemiBold"
+                                                       Foreground="{StaticResource TextMutedBrush}"
+                                                       Margin="0,0,0,8"/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                                <Ellipse Width="6" Height="6"
+                                                         Fill="{StaticResource SuccessBrush}"
+                                                         Margin="0,0,8,0"
+                                                         VerticalAlignment="Center"/>
+                                                <TextBlock Text="Database: Connected"
+                                                           FontSize="11"
+                                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Ellipse Width="6" Height="6"
+                                                         Fill="{StaticResource SuccessBrush}"
+                                                         Margin="0,0,8,0"
+                                                         VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="TxtLastLogin"
+                                                           Text="Last login: Just now"
+                                                           FontSize="11"
+                                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                    </Grid>
+
+                    <!-- ================================================== -->
+                    <!-- PLACEHOLDER PAGES (hidden by default)              -->
+                    <!-- These will be replaced with full UserControls      -->
+                    <!-- in Week 6 as each module is completed.             -->
+                    <!-- ================================================== -->
+
+                    <Grid x:Name="PageExperiments" Visibility="Collapsed">
+                        <Border Style="{StaticResource MetricCardStyle}">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="🧪" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                                <TextBlock Text="Experiments Module"
+                                           FontSize="22" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="CRUD operations for experiments, samples, and test results will be implemented here."
+                                           FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"
+                                           HorizontalAlignment="Center" Margin="0,8,0,0"
+                                           TextWrapping="Wrap" MaxWidth="400"
+                                           TextAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Grid x:Name="PageEquipment" Visibility="Collapsed">
+                        <Border Style="{StaticResource MetricCardStyle}">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="⚙️" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                                <TextBlock Text="Equipment Management"
+                                           FontSize="22" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Equipment registry, calibration tracking, and status management connected to EquipmentRepository."
+                                           FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"
+                                           HorizontalAlignment="Center" Margin="0,8,0,0"
+                                           TextWrapping="Wrap" MaxWidth="400"
+                                           TextAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Grid x:Name="PageInventory" Visibility="Collapsed">
+                        <Border Style="{StaticResource MetricCardStyle}">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="📦" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                                <TextBlock Text="Inventory Management"
+                                           FontSize="22" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Reagent and consumable tracking with low-stock alerts and stock transaction history."
+                                           FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"
+                                           HorizontalAlignment="Center" Margin="0,8,0,0"
+                                           TextWrapping="Wrap" MaxWidth="400"
+                                           TextAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Grid x:Name="PageReports" Visibility="Collapsed">
+                        <Border Style="{StaticResource MetricCardStyle}">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="📋" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                                <TextBlock Text="Reports &amp; Data Export"
+                                           FontSize="22" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Generate and export experiment summaries, calibration reports, and inventory status in CSV/PDF formats."
+                                           FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"
+                                           HorizontalAlignment="Center" Margin="0,8,0,0"
+                                           TextWrapping="Wrap" MaxWidth="400"
+                                           TextAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Grid x:Name="PageAuditTrail" Visibility="Collapsed">
+                        <Border Style="{StaticResource MetricCardStyle}">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="🔍" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                                <TextBlock Text="Audit Trail"
+                                           FontSize="22" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Immutable log viewer for all data-modifying operations with filtering by user, date, table, and operation type."
+                                           FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"
+                                           HorizontalAlignment="Center" Margin="0,8,0,0"
+                                           TextWrapping="Wrap" MaxWidth="400"
+                                           TextAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Grid x:Name="PageUsers" Visibility="Collapsed">
+                        <Border Style="{StaticResource MetricCardStyle}">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="👥" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                                <TextBlock Text="User Management"
+                                           FontSize="22" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Admin-only module for user account creation, role assignment, password resets, and account activation/deactivation."
+                                           FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"
+                                           HorizontalAlignment="Center" Margin="0,8,0,0"
+                                           TextWrapping="Wrap" MaxWidth="400"
+                                           TextAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Border>
+</Window>
