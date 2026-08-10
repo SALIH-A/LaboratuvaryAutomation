@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LaboratuvarAotumation")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+54b22d324d04a9933e9498d7835bfd7fe36ae4b7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c7e4a7a5d635e7c9d738428b7cce84cc47874abf")]
 [assembly: System.Reflection.AssemblyProductAttribute("LaboratuvarAotumation")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LaboratuvarAotumation")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
