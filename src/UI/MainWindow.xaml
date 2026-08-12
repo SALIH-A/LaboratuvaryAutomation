@@ -848,43 +848,15 @@
                     </Grid>
 
                     <!-- ================================================== -->
-                    <!-- PLACEHOLDER PAGES (hidden by default)              -->
-                    <!-- These will be replaced with full UserControls      -->
-                    <!-- in Week 6 as each module is completed.             -->
+                    <!-- MODULE PAGES (hidden by default, shown on nav)     -->
                     <!-- ================================================== -->
 
                     <Grid x:Name="PageExperiments" Visibility="Collapsed">
-                        <Border Style="{StaticResource MetricCardStyle}">
-                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <TextBlock Text="🧪" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,12"/>
-                                <TextBlock Text="Experiments Module"
-                                           FontSize="22" FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextPrimaryBrush}"
-                                           HorizontalAlignment="Center"/>
-                                <TextBlock Text="CRUD operations for experiments, samples, and test results will be implemented here."
-                                           FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"
-                                           HorizontalAlignment="Center" Margin="0,8,0,0"
-                                           TextWrapping="Wrap" MaxWidth="400"
-                                           TextAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
+                        <views:ExperimentsView/>
                     </Grid>
 
                     <Grid x:Name="PageEquipment" Visibility="Collapsed">
-                        <Border Style="{StaticResource MetricCardStyle}">
-                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <TextBlock Text="⚙️" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,12"/>
-                                <TextBlock Text="Equipment Management"
-                                           FontSize="22" FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextPrimaryBrush}"
-                                           HorizontalAlignment="Center"/>
-                                <TextBlock Text="Equipment registry, calibration tracking, and status management connected to EquipmentRepository."
-                                           FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"
-                                           HorizontalAlignment="Center" Margin="0,8,0,0"
-                                           TextWrapping="Wrap" MaxWidth="400"
-                                           TextAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
+                        <views:EquipmentView/>
                     </Grid>
 
                     <Grid x:Name="PageInventory" Visibility="Collapsed">

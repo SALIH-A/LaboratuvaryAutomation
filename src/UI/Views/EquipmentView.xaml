@@ -1,0 +1,306 @@
+<UserControl x:Class="LDMAS.UI.Views.EquipmentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <UserControl.Resources>
+        <!-- ── Color tokens (matching MainWindow clinical dark theme) ── -->
+        <SolidColorBrush x:Key="CardBgBrush"          Color="#1A2332"/>
+        <SolidColorBrush x:Key="CardBorderBrush"      Color="#1E3044"/>
+        <SolidColorBrush x:Key="TextPrimaryBrush"     Color="#E2E8F0"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush"   Color="#94A3B8"/>
+        <SolidColorBrush x:Key="TextMutedBrush"       Color="#64748B"/>
+        <SolidColorBrush x:Key="AccentBrush"          Color="#00B4D8"/>
+        <SolidColorBrush x:Key="SuccessBrush"         Color="#10B981"/>
+        <SolidColorBrush x:Key="WarningBrush"         Color="#F59E0B"/>
+        <SolidColorBrush x:Key="DangerBrush"          Color="#EF4444"/>
+
+        <!-- ── Themed TextBox Style ── -->
+        <Style x:Key="ThemedTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background"      Value="#111827"/>
+            <Setter Property="Foreground"       Value="#E2E8F0"/>
+            <Setter Property="BorderBrush"      Value="#1E3044"/>
+            <Setter Property="BorderThickness"  Value="1"/>
+            <Setter Property="Padding"          Value="10,8"/>
+            <Setter Property="FontSize"         Value="13"/>
+            <Setter Property="CaretBrush"       Value="#00B4D8"/>
+            <Setter Property="Height"           Value="38"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Header -->
+            <RowDefinition Height="Auto"/>
+            <!-- Main Content: DataGrid + Form Panel -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ============================================================== -->
+        <!-- ROW 0 — PAGE HEADER                                            -->
+        <!-- ============================================================== -->
+        <Border Grid.Row="0"
+                Background="{StaticResource CardBgBrush}"
+                BorderBrush="{StaticResource CardBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="28,22"
+                Margin="0,0,0,20">
+            <Border.Effect>
+                <DropShadowEffect Color="#000000" Opacity="0.15" BlurRadius="12" ShadowDepth="2"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Equipment Management"
+                               FontSize="22" FontWeight="Bold"
+                               Foreground="{StaticResource TextPrimaryBrush}"/>
+                    <TextBlock Text="Register, track, and manage laboratory instruments. Monitor calibration status and maintenance schedules."
+                               FontSize="13"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               Margin="0,6,0,0"
+                               TextWrapping="Wrap" MaxWidth="620"/>
+                </StackPanel>
+                <TextBlock Grid.Column="1"
+                           Text="⚙️" FontSize="42"
+                           VerticalAlignment="Center"
+                           Opacity="0.35"/>
+            </Grid>
+        </Border>
+
+        <!-- ============================================================== -->
+        <!-- ROW 1 — SPLIT LAYOUT: DataGrid (left) + Form (right)          -->
+        <!-- ============================================================== -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <!-- Equipment List -->
+                <ColumnDefinition Width="2*"/>
+                <!-- Register Form Panel -->
+                <ColumnDefinition Width="*" MinWidth="320"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ── LEFT: Equipment DataGrid ── -->
+            <Border Grid.Column="0"
+                    Background="{StaticResource CardBgBrush}"
+                    BorderBrush="{StaticResource CardBorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Padding="24,20"
+                    Margin="0,0,16,0">
+                <DockPanel>
+                    <!-- Section Header -->
+                    <Grid DockPanel.Dock="Top" Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Text="Equipment Registry"
+                                   FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                        <TextBlock Grid.Column="1"
+                                   x:Name="TxtEquipmentCount"
+                                   Text="0 items"
+                                   FontSize="12"
+                                   Foreground="{StaticResource TextMutedBrush}"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <!-- DataGrid -->
+                    <DataGrid x:Name="DgEquipment"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="None"
+                              Background="Transparent"
+                              Foreground="{StaticResource TextSecondaryBrush}"
+                              BorderThickness="0"
+                              RowBackground="Transparent"
+                              AlternatingRowBackground="#141E2E"
+                              FontSize="12.5"
+                              CanUserResizeRows="False">
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextMutedBrush}"/>
+                                <Setter Property="FontSize" Value="11"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Padding" Value="8,10"/>
+                                <Setter Property="BorderBrush" Value="#1E3044"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Padding" Value="8,6"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="DataGridCell">
+                                            <Border Padding="{TemplateBinding Padding}"
+                                                    Background="{TemplateBinding Background}">
+                                                <ContentPresenter VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGrid.CellStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="NAME"             Binding="{Binding Name}"            Width="*"/>
+                            <DataGridTextColumn Header="MODEL"            Binding="{Binding Model}"           Width="130"/>
+                            <DataGridTextColumn Header="SERIAL NO."       Binding="{Binding SerialNumber}"    Width="130"/>
+                            <DataGridTextColumn Header="STATUS"           Binding="{Binding Status}"          Width="160"/>
+                            <DataGridTextColumn Header="LOCATION"         Binding="{Binding Location}"        Width="110"/>
+                            <DataGridTextColumn Header="CALIBRATION"      Binding="{Binding CalibrationDate}" Width="120"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+
+            <!-- ── RIGHT: Register Equipment Form ── -->
+            <Border Grid.Column="1"
+                    Background="{StaticResource CardBgBrush}"
+                    BorderBrush="{StaticResource CardBorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Padding="24,20">
+                <DockPanel LastChildFill="False">
+
+                    <!-- Form Header -->
+                    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,20">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                            <Border Width="36" Height="36" CornerRadius="8"
+                                    Background="#0D3B2A" Margin="0,0,12,0">
+                                <TextBlock Text="＋" FontSize="18"
+                                           Foreground="{StaticResource SuccessBrush}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Text="Register Equipment"
+                                       FontSize="16" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Border Height="1" Background="#1E3044"/>
+                    </StackPanel>
+
+                    <!-- Form Fields -->
+                    <StackPanel DockPanel.Dock="Top">
+
+                        <!-- Equipment Name -->
+                        <TextBlock Text="EQUIPMENT NAME"
+                                   FontSize="10.5" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextMutedBrush}"
+                                   Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtEqName"
+                                 Style="{StaticResource ThemedTextBoxStyle}"
+                                 Margin="0,0,0,14"/>
+
+                        <!-- Model / Manufacturer Row -->
+                        <Grid Margin="0,0,0,14">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="MODEL"
+                                           FontSize="10.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}"
+                                           Margin="0,0,0,6"/>
+                                <TextBox x:Name="TxtEqModel"
+                                         Style="{StaticResource ThemedTextBoxStyle}"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="SERIAL NO."
+                                           FontSize="10.5" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextMutedBrush}"
+                                           Margin="0,0,0,6"/>
+                                <TextBox x:Name="TxtEqSerial"
+                                         Style="{StaticResource ThemedTextBoxStyle}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Location -->
+                        <TextBlock Text="LOCATION"
+                                   FontSize="10.5" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextMutedBrush}"
+                                   Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtEqLocation"
+                                 Style="{StaticResource ThemedTextBoxStyle}"
+                                 Margin="0,0,0,14"/>
+
+                        <!-- Calibration Date -->
+                        <TextBlock Text="LAST CALIBRATION DATE"
+                                   FontSize="10.5" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextMutedBrush}"
+                                   Margin="0,0,0,6"/>
+                        <DatePicker x:Name="DpEqCalibration"
+                                    Height="38"
+                                    Background="#111827"
+                                    Foreground="{StaticResource TextPrimaryBrush}"
+                                    BorderBrush="{StaticResource CardBorderBrush}"
+                                    FontSize="13"
+                                    Margin="0,0,0,24"/>
+
+                    </StackPanel>
+
+                    <!-- Submit Button -->
+                    <Button DockPanel.Dock="Top"
+                            x:Name="BtnRegisterEquipment"
+                            Height="44"
+                            Cursor="Hand"
+                            Click="BtnRegisterEquipment_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="SubmitBorder"
+                                        CornerRadius="10"
+                                        Padding="20,0"
+                                        BorderThickness="0">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#047857" Offset="0"/>
+                                            <GradientStop Color="#10B981" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <ContentPresenter HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="SubmitBorder" Property="Opacity" Value="0.85"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⚙️" FontSize="15" Margin="0,0,10,0"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="Register Equipment"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       Foreground="White"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Status Feedback -->
+                    <TextBlock DockPanel.Dock="Top"
+                               x:Name="TxtEqFormStatus"
+                               Text=""
+                               FontSize="12"
+                               Foreground="{StaticResource SuccessBrush}"
+                               HorizontalAlignment="Center"
+                               Margin="0,12,0,0"/>
+
+                </DockPanel>
+            </Border>
+
+        </Grid>
+    </Grid>
+</UserControl>

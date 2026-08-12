@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\
+c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\
 LaboratuvarAotumation
 none
 false
 TRACE;DEBUG;NET;NET9_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WİNDOWS7_0_OR_GREATER
-C:\Users\salih\Desktop\LaboratuvarAotumation\App.xaml
-11589837669
+c:\Users\salih\Desktop\LaboratuvarAotumation\App.xaml
+3-1550044168
 
-8-881529117
+101542900414
 208-329661942
-src\UI\MainWindow.xaml;
+src\UI\MainWindow.xaml;src\UI\Views\InventoryView.xaml;src\UI\Views\ReportsView.xaml;
 
 False
 

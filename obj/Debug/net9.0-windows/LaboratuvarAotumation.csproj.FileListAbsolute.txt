@@ -41,3 +41,9 @@ c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\refint\Lab
 c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\LaboratuvarAotumation.pdb
 c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\LaboratuvarAotumation.genruntimeconfig.cache
 c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\ref\LaboratuvarAotumation.dll
+c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\InventoryView.baml
+c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\ReportsView.baml
+c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\InventoryView.g.cs
+c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\ReportsView.g.cs
+c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\GeneratedInternalTypeHelper.g.cs
+c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\LaboratuvarAotumation_MarkupCompile.lref
