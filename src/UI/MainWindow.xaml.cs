@@ -11,10 +11,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using LDMAS.Utils;
+using LDMAS.UI.Views;
 
 namespace LDMAS.UI
 {
@@ -451,19 +454,94 @@ namespace LDMAS.UI
         }
 
         /// <summary>
-        /// Quick action: Navigate to the Reports page to generate a CSV export.
+        /// Quick action: Instantly exports the current dashboard experiment data
+        /// to a CSV file via <see cref="ExportUtility"/>. Opens a SaveFileDialog
+        /// so the researcher can choose the output path.
         /// </summary>
         private void BtnQuickGenerateReport_Click(object sender, RoutedEventArgs e)
         {
-            NavigateToPage("Reports");
+            var dialog = new Microsoft.Win32.SaveFileDialog
+            {
+                Filter = "CSV Files (*.csv)|*.csv",
+                DefaultExt = ".csv",
+                FileName = $"LDMAS_QuickReport_{DateTime.Now:yyyyMMdd_HHmmss}"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                // Build export data from the dashboard's Recent Experiments grid
+                var exportData = new List<DashboardExportRow>();
+
+                if (DgRecentExperiments.ItemsSource != null)
+                {
+                    foreach (dynamic item in DgRecentExperiments.ItemsSource)
+                    {
+                        exportData.Add(new DashboardExportRow
+                        {
+                            Title    = item.Title,
+                            Category = item.Category,
+                            Status   = item.Status,
+                            Date     = item.Date
+                        });
+                    }
+                }
+
+                bool success = ExportUtility.ExportToCsv(exportData, dialog.FileName);
+
+                if (success)
+                {
+                    MessageBox.Show(
+                        $"Report exported successfully!\n\n" +
+                        $"File: {dialog.FileName}\n" +
+                        $"Records: {exportData.Count}\n" +
+                        $"Generated: {DateTime.Now:dd MMM yyyy, HH:mm:ss}",
+                        "✅ Export Complete",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "An error occurred while exporting. Check the console for details.",
+                        "Export Failed",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
+            }
+
+            ResetSessionTimer();
         }
 
         /// <summary>
-        /// Quick action: Navigate to the Inventory page to check stock levels.
+        /// Quick action: Navigates to the Inventory page and applies a
+        /// "Low Stock" filter so only items below minimum threshold are shown.
         /// </summary>
         private void BtnQuickCheckInventory_Click(object sender, RoutedEventArgs e)
         {
             NavigateToPage("Inventory");
+
+            // Find the embedded InventoryView UserControl and apply the filter
+            var inventoryView = FindVisualChild<InventoryView>(PageInventory);
+            inventoryView?.ApplyLowStockFilter();
+        }
+
+        /// <summary>
+        /// Recursively searches the visual tree for a child element of type T.
+        /// Used to locate embedded UserControls within page Grid containers.
+        /// </summary>
+        private static T? FindVisualChild<T>(System.Windows.DependencyObject parent) where T : System.Windows.DependencyObject
+        {
+            for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = System.Windows.Media.VisualTreeHelper.GetChild(parent, i);
+                if (child is T result)
+                    return result;
+
+                var descendant = FindVisualChild<T>(child);
+                if (descendant != null)
+                    return descendant;
+            }
+            return null;
         }
 
         // =====================================================================
@@ -527,5 +605,17 @@ namespace LDMAS.UI
             TxtConnectionStatus.Text = isConnected ? "Connected" : "Disconnected";
             // In a full implementation, also toggle the green/red dot
         }
+    }
+
+    /// <summary>
+    /// Typed DTO for exporting dashboard experiment data to CSV.
+    /// Used by the "Generate Report" quick action with <see cref="ExportUtility"/>.
+    /// </summary>
+    public class DashboardExportRow
+    {
+        public string Title { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string Date { get; set; } = string.Empty;
     }
 }

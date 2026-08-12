@@ -23,12 +23,47 @@ namespace LDMAS.UI.Views
     /// </summary>
     public partial class InventoryView : UserControl
     {
+        /// <summary>
+        /// Master list of all inventory items. Retained for filter/reset operations.
+        /// </summary>
+        private List<InventoryItem> _allItems = new();
+
         public InventoryView()
         {
             InitializeComponent();
 
             // Load sample data for demonstration
             LoadSampleInventoryData();
+        }
+
+        // =====================================================================
+        // PUBLIC FILTER API — Called by MainWindow Quick Actions
+        // =====================================================================
+
+        /// <summary>
+        /// Filters the DataGrid to display only items whose stock level
+        /// is below the minimum threshold. Called by the Dashboard's
+        /// "Check Inventory" quick action button.
+        /// </summary>
+        public void ApplyLowStockFilter()
+        {
+            var lowStockItems = _allItems.Where(i => i.StockLevel < i.MinThreshold).ToList();
+
+            DgInventory.ItemsSource = lowStockItems;
+
+            // Update summary cards to reflect the filtered view
+            TxtTotalItems.Text = lowStockItems.Count.ToString();
+            TxtInStock.Text = "0";
+            TxtLowStock.Text = lowStockItems.Count.ToString();
+        }
+
+        /// <summary>
+        /// Resets the DataGrid back to displaying all inventory items.
+        /// </summary>
+        public void ResetFilter()
+        {
+            DgInventory.ItemsSource = _allItems;
+            UpdateSummaryCards(_allItems);
         }
 
         // =====================================================================
@@ -41,7 +76,7 @@ namespace LDMAS.UI.Views
         /// </summary>
         private void LoadSampleInventoryData()
         {
-            var inventoryItems = new List<InventoryItem>
+            _allItems = new List<InventoryItem>
             {
                 new() { ItemName = "Hydrochloric Acid (HCl) 1M",     Category = "Reagent",     StockLevel = 12,    MinThreshold = 5,   Unit = "L",    LastRestocked = "2026-07-28" },
                 new() { ItemName = "Sodium Hydroxide (NaOH) 0.5M",   Category = "Reagent",     StockLevel = 8,     MinThreshold = 5,   Unit = "L",    LastRestocked = "2026-08-01" },
@@ -56,7 +91,7 @@ namespace LDMAS.UI.Views
             };
 
             // Calculate status for each item
-            foreach (var item in inventoryItems)
+            foreach (var item in _allItems)
             {
                 if (item.StockLevel <= 0)
                     item.Status = "🔴 Out of Stock";
@@ -66,11 +101,17 @@ namespace LDMAS.UI.Views
                     item.Status = "✅ In Stock";
             }
 
-            DgInventory.ItemsSource = inventoryItems;
+            DgInventory.ItemsSource = _allItems;
+            UpdateSummaryCards(_allItems);
+        }
 
-            // Update summary cards
-            int total = inventoryItems.Count;
-            int lowStock = inventoryItems.Count(i => i.StockLevel < i.MinThreshold);
+        /// <summary>
+        /// Updates the three KPI summary cards based on the provided item list.
+        /// </summary>
+        private void UpdateSummaryCards(List<InventoryItem> items)
+        {
+            int total = items.Count;
+            int lowStock = items.Count(i => i.StockLevel < i.MinThreshold);
             int inStock = total - lowStock;
 
             TxtTotalItems.Text = total.ToString();

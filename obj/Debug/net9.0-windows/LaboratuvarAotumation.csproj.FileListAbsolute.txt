@@ -47,3 +47,7 @@ c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Vie
 c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\ReportsView.g.cs
 c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\GeneratedInternalTypeHelper.g.cs
 c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\LaboratuvarAotumation_MarkupCompile.lref
+C:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\EquipmentView.baml
+C:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\ExperimentsView.baml
+C:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\EquipmentView.g.cs
+C:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\ExperimentsView.g.cs
