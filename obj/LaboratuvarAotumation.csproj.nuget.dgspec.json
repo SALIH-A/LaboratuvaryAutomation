@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj": {}
+    "C:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj": {}
   },
   "projects": {
-    "c:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj": {
+    "C:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj",
+        "projectUniqueName": "C:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj",
         "projectName": "LaboratuvarAotumation",
-        "projectPath": "c:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj",
+        "projectPath": "C:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\LaboratuvarAotumation.csproj",
         "packagesPath": "C:\\Users\\salih\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\obj\\",
+        "outputPath": "C:\\Users\\salih\\Desktop\\LaboratuvarAotumation\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\DevExpress 25.1\\Components\\Offline Packages",

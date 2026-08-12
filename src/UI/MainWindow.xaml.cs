@@ -450,6 +450,22 @@ namespace LDMAS.UI
             NavigateToPage("Equipment");
         }
 
+        /// <summary>
+        /// Quick action: Navigate to the Reports page to generate a CSV export.
+        /// </summary>
+        private void BtnQuickGenerateReport_Click(object sender, RoutedEventArgs e)
+        {
+            NavigateToPage("Reports");
+        }
+
+        /// <summary>
+        /// Quick action: Navigate to the Inventory page to check stock levels.
+        /// </summary>
+        private void BtnQuickCheckInventory_Click(object sender, RoutedEventArgs e)
+        {
+            NavigateToPage("Inventory");
+        }
+
         // =====================================================================
         // DASHBOARD DATA LOADING
         // =====================================================================
