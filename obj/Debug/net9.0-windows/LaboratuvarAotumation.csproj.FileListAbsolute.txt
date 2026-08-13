@@ -51,3 +51,7 @@ C:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Vie
 C:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\ExperimentsView.baml
 C:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\EquipmentView.g.cs
 C:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\ExperimentsView.g.cs
+c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\AuditTrailView.baml
+c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\UserManagementView.baml
+c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\AuditTrailView.g.cs
+c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\UserManagementView.g.cs

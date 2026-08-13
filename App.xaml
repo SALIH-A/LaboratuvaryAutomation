@@ -3,5 +3,194 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="src/UI/MainWindow.xaml">
     <Application.Resources>
+
+        <!-- ============================================================== -->
+        <!-- GLOBAL DESIGN TOKENS                                           -->
+        <!-- Clinical Dark Theme — Applied Project-Wide                     -->
+        <!-- ============================================================== -->
+        <SolidColorBrush x:Key="GlobalControlBg"         Color="#1A1D2D"/>
+        <SolidColorBrush x:Key="GlobalControlBorder"     Color="#2A2F42"/>
+        <SolidColorBrush x:Key="GlobalControlFg"         Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="GlobalItemHoverBg"       Color="#334D6E"/>
+        <SolidColorBrush x:Key="GlobalItemSelectedBg"    Color="#2A4060"/>
+        <SolidColorBrush x:Key="GlobalPopupBg"           Color="#212533"/>
+        <SolidColorBrush x:Key="GlobalMutedFg"           Color="#94A3B8"/>
+        <SolidColorBrush x:Key="GlobalAccent"            Color="#00B4D8"/>
+
+        <!-- ============================================================== -->
+        <!-- GLOBAL COMBOBOX STYLE                                          -->
+        <!-- Overrides the default Chrome template to enforce dark navy     -->
+        <!-- backgrounds, white foreground, and clinical-blue hover states  -->
+        <!-- on every ComboBox in the application.                          -->
+        <!-- ============================================================== -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Background"      Value="{StaticResource GlobalControlBg}"/>
+            <Setter Property="Foreground"       Value="{StaticResource GlobalControlFg}"/>
+            <Setter Property="BorderBrush"      Value="{StaticResource GlobalControlBorder}"/>
+            <Setter Property="BorderThickness"  Value="1"/>
+            <Setter Property="FontSize"         Value="13"/>
+            <Setter Property="Height"           Value="38"/>
+            <Setter Property="Padding"          Value="10,6"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+
+            <!-- ── Dropdown Item Style ── -->
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="Background"  Value="{StaticResource GlobalPopupBg}"/>
+                        <Setter Property="Foreground"   Value="{StaticResource GlobalControlFg}"/>
+                        <Setter Property="Padding"      Value="12,8"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ComboBoxItem">
+                                    <Border x:Name="ItemBorder"
+                                            Background="{TemplateBinding Background}"
+                                            Padding="{TemplateBinding Padding}"
+                                            SnapsToDevicePixels="True">
+                                        <ContentPresenter VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="ItemBorder" Property="Background"
+                                                    Value="{StaticResource GlobalItemHoverBg}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="ItemBorder" Property="Background"
+                                                    Value="{StaticResource GlobalItemSelectedBg}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+
+            <!-- ── Full Control Template ── -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <!-- Toggle Button (the visible ComboBox surface) -->
+                            <ToggleButton x:Name="ToggleBtn"
+                                          Focusable="False"
+                                          IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                          ClickMode="Press">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="ToggleBorder"
+                                                Background="{StaticResource GlobalControlBg}"
+                                                BorderBrush="{StaticResource GlobalControlBorder}"
+                                                BorderThickness="1"
+                                                CornerRadius="6"
+                                                Padding="0">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="32"/>
+                                                </Grid.ColumnDefinitions>
+                                                <!-- Chevron Arrow -->
+                                                <Border Grid.Column="1">
+                                                    <Path x:Name="Arrow"
+                                                          Data="M 0 0 L 4 4 L 8 0 Z"
+                                                          Fill="{StaticResource GlobalMutedFg}"
+                                                          HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="ToggleBorder" Property="BorderBrush"
+                                                        Value="{StaticResource GlobalAccent}"/>
+                                                <Setter TargetName="Arrow" Property="Fill"
+                                                        Value="{StaticResource GlobalControlFg}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="ToggleBorder" Property="BorderBrush"
+                                                        Value="{StaticResource GlobalAccent}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+
+                            <!-- Selected Item Display -->
+                            <ContentPresenter x:Name="ContentSite"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                              IsHitTestVisible="False"
+                                              Margin="12,0,32,0"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Left"/>
+
+                            <!-- Dropdown Popup -->
+                            <Popup x:Name="PART_Popup"
+                                   Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Border x:Name="DropDownBorder"
+                                        Background="{StaticResource GlobalPopupBg}"
+                                        BorderBrush="{StaticResource GlobalControlBorder}"
+                                        BorderThickness="1"
+                                        CornerRadius="6"
+                                        Margin="0,2,0,0"
+                                        MinWidth="{TemplateBinding ActualWidth}"
+                                        MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                        SnapsToDevicePixels="True">
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#000000" Opacity="0.35"
+                                                          BlurRadius="16" ShadowDepth="4"/>
+                                    </Border.Effect>
+                                    <ScrollViewer Margin="4" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True"
+                                                    KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ============================================================== -->
+        <!-- GLOBAL DATEPICKER STYLE                                        -->
+        <!-- Ensures DatePicker controls also match the dark theme.         -->
+        <!-- ============================================================== -->
+        <Style TargetType="DatePicker">
+            <Setter Property="Background"      Value="{StaticResource GlobalControlBg}"/>
+            <Setter Property="Foreground"       Value="{StaticResource GlobalControlFg}"/>
+            <Setter Property="BorderBrush"      Value="{StaticResource GlobalControlBorder}"/>
+            <Setter Property="BorderThickness"  Value="1"/>
+            <Setter Property="FontSize"         Value="13"/>
+            <Setter Property="Padding"          Value="8,6"/>
+        </Style>
+
+        <!-- ============================================================== -->
+        <!-- GLOBAL DATEPICKER TEXTBOX STYLE                                -->
+        <!-- The internal TextBox inside DatePicker inherits light defaults  -->
+        <!-- unless explicitly overridden here.                             -->
+        <!-- ============================================================== -->
+        <Style TargetType="DatePickerTextBox">
+            <Setter Property="Background"  Value="Transparent"/>
+            <Setter Property="Foreground"   Value="{StaticResource GlobalControlFg}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CaretBrush"   Value="{StaticResource GlobalAccent}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DatePickerTextBox">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      HorizontalScrollBarVisibility="Hidden"
+                                      VerticalScrollBarVisibility="Hidden"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Application.Resources>
 </Application>

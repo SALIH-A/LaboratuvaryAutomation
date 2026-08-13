@@ -54,6 +54,9 @@ namespace LDMAS.UI.Views
         /// </summary>
         private void ApplyFilters()
         {
+            // Arayüz elemanları henüz çizilmediyse işlemi iptal et (Sessiz çökmeyi önler)
+            if (CmbFilterModule == null || CmbFilterOperation == null || TxtSearchUser == null)
+                return;
             IEnumerable<AuditLogEntry> filtered = _allEntries;
 
             // Filter by Module
