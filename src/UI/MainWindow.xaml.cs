@@ -139,6 +139,81 @@ namespace LDMAS.UI
 
             // Record initial activity
             _lastActivityTime = DateTime.Now;
+
+            // Setup Authentication Flow
+            SetupAuthentication();
+        }
+
+        // =====================================================================
+        // AUTHENTICATION & RBAC
+        // =====================================================================
+
+        /// <summary>
+        /// Wires up the Login and Register view events for the initial authentication state.
+        /// </summary>
+        private void SetupAuthentication()
+        {
+            // Initial Top Bar Text for Auth
+            TxtPageTitle.Text = "Authentication";
+            TxtPageSubtitle.Text = "  —  Sign In";
+
+            ViewLogin.OnLoginSuccess += ViewLogin_OnLoginSuccess;
+            
+            ViewLogin.OnNavigateToRegister += (s, e) => 
+            { 
+                ViewLogin.Visibility = Visibility.Collapsed; 
+                ViewRegister.Visibility = Visibility.Visible; 
+                TxtPageSubtitle.Text = "  —  Create Account";
+            };
+
+            ViewRegister.OnNavigateToLogin += (s, e) => 
+            { 
+                ViewRegister.Visibility = Visibility.Collapsed; 
+                ViewLogin.Visibility = Visibility.Visible; 
+                TxtPageSubtitle.Text = "  —  Sign In";
+            };
+
+            ViewRegister.OnRegistrationSuccess += (s, e) => 
+            { 
+                ViewRegister.Visibility = Visibility.Collapsed; 
+                ViewLogin.Visibility = Visibility.Visible; 
+                TxtPageSubtitle.Text = "  —  Sign In";
+            };
+        }
+
+        /// <summary>
+        /// Handles the event when the user successfully authenticates.
+        /// Switches to the main application view and applies Role-Based Access Control (RBAC).
+        /// </summary>
+        private void ViewLogin_OnLoginSuccess(object? sender, EventArgs e)
+        {
+            // 1. Hide the auth views
+            ViewLogin.Visibility = Visibility.Collapsed;
+            ViewRegister.Visibility = Visibility.Collapsed;
+
+            // 2. Show the Sidebar and navigate to the Dashboard
+            SidebarBorder.Visibility = Visibility.Visible;
+            NavigateToPage("Dashboard");
+
+            // 3. Update User Info in the Sidebar Footer
+            TxtUserFullName.Text = Security.SessionManager.DisplayName;
+            TxtUserRole.Text = Security.SessionManager.CurrentRole;
+            
+            string name = Security.SessionManager.DisplayName;
+            TxtUserInitial.Text = string.IsNullOrEmpty(name) ? "?" : name.Substring(0, Math.Min(2, name.Length)).ToUpper();
+
+            // 4. Dynamic RBAC Toggling
+            // If the user is NOT an Admin, hide the "User Management" and "Audit Trail" buttons.
+            if (!Security.SessionManager.IsAdmin)
+            {
+                BtnNavUsers.Visibility = Visibility.Collapsed;
+                BtnNavAuditTrail.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                BtnNavUsers.Visibility = Visibility.Visible;
+                BtnNavAuditTrail.Visibility = Visibility.Visible;
+            }
         }
 
         // =====================================================================
@@ -331,7 +406,6 @@ namespace LDMAS.UI
 
         /// <summary>
         /// Handles the logout button click. Confirms, then exits to the login screen.
-        /// In a full implementation, this would clear the session and show LoginWindow.
         /// </summary>
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
@@ -344,18 +418,20 @@ namespace LDMAS.UI
             if (result == MessageBoxResult.Yes)
             {
                 StopSessionTimer();
+                Security.SessionManager.Logout();
                 System.Diagnostics.Debug.WriteLine("[MainWindow] User logged out.");
 
-                // TODO: Show LoginWindow and close MainWindow
-                // var loginWindow = new LoginWindow();
-                // loginWindow.Show();
-                // this.Close();
+                // Hide main app UI and show Login view
+                SidebarBorder.Visibility = Visibility.Collapsed;
+                
+                foreach (var page in _pages.Values)
+                {
+                    page.Visibility = Visibility.Collapsed;
+                }
 
-                MessageBox.Show(
-                    "You have been logged out successfully.\n\nIn the full implementation, the Login window would appear here.",
-                    "Logged Out",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                ViewLogin.Visibility = Visibility.Visible;
+                TxtPageTitle.Text = "Authentication";
+                TxtPageSubtitle.Text = "  —  Sign In";
             }
         }
 

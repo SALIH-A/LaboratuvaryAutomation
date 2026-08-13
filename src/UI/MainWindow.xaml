@@ -191,7 +191,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <!-- Sidebar -->
-                <ColumnDefinition Width="260"/>
+                <ColumnDefinition Width="Auto"/>
                 <!-- Main Content -->
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
@@ -206,7 +206,8 @@
             <!-- ========================================================== -->
             <!-- SIDEBAR — Navigation Panel (spans both rows)               -->
             <!-- ========================================================== -->
-            <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+            <Border x:Name="SidebarBorder" Visibility="Collapsed" Width="260"
+                    Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
                     Background="{StaticResource SidebarBgBrush}"
                     CornerRadius="8,0,0,8">
 
@@ -490,9 +491,15 @@
                 <Grid Margin="28,24,28,20">
 
                     <!-- ================================================== -->
+                    <!-- AUTHENTICATION VIEWS                               -->
+                    <!-- ================================================== -->
+                    <views:LoginView x:Name="ViewLogin" Visibility="Visible" />
+                    <views:RegisterView x:Name="ViewRegister" Visibility="Collapsed" />
+
+                    <!-- ================================================== -->
                     <!-- DASHBOARD PAGE (Default View)                      -->
                     <!-- ================================================== -->
-                    <Grid x:Name="PageDashboard" Visibility="Visible">
+                    <Grid x:Name="PageDashboard" Visibility="Collapsed">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
