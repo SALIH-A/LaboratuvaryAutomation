@@ -55,3 +55,4 @@ c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Vie
 c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\UserManagementView.baml
 c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\AuditTrailView.g.cs
 c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\src\UI\Views\UserManagementView.g.cs
+c:\Users\salih\Desktop\LaboratuvarAotumation\obj\Debug\net9.0-windows\App.baml
