@@ -868,37 +868,11 @@
                     </Grid>
 
                     <Grid x:Name="PageAuditTrail" Visibility="Collapsed">
-                        <Border Style="{StaticResource MetricCardStyle}">
-                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <TextBlock Text="🔍" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,12"/>
-                                <TextBlock Text="Audit Trail"
-                                           FontSize="22" FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextPrimaryBrush}"
-                                           HorizontalAlignment="Center"/>
-                                <TextBlock Text="Immutable log viewer for all data-modifying operations with filtering by user, date, table, and operation type."
-                                           FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"
-                                           HorizontalAlignment="Center" Margin="0,8,0,0"
-                                           TextWrapping="Wrap" MaxWidth="400"
-                                           TextAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
+                        <views:AuditTrailView/>
                     </Grid>
 
                     <Grid x:Name="PageUsers" Visibility="Collapsed">
-                        <Border Style="{StaticResource MetricCardStyle}">
-                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <TextBlock Text="👥" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,12"/>
-                                <TextBlock Text="User Management"
-                                           FontSize="22" FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextPrimaryBrush}"
-                                           HorizontalAlignment="Center"/>
-                                <TextBlock Text="Admin-only module for user account creation, role assignment, password resets, and account activation/deactivation."
-                                           FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"
-                                           HorizontalAlignment="Center" Margin="0,8,0,0"
-                                           TextWrapping="Wrap" MaxWidth="400"
-                                           TextAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
+                        <views:UserManagementView/>
                     </Grid>
 
                 </Grid>
