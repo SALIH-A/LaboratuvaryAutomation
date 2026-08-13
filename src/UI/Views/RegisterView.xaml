@@ -1,0 +1,220 @@
+<UserControl x:Class="LDMAS.UI.Views.RegisterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <UserControl.Resources>
+        <!-- ── Clinical Dark Theme Tokens ── -->
+        <SolidColorBrush x:Key="PanelBg"           Color="#0F1B2D"/>
+        <SolidColorBrush x:Key="CardBg"            Color="#1A1D2D"/>
+        <SolidColorBrush x:Key="CardBorder"        Color="#2A2F42"/>
+        <SolidColorBrush x:Key="InputBg"           Color="#111827"/>
+        <SolidColorBrush x:Key="TextPrimary"       Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="TextSecondary"     Color="#94A3B8"/>
+        <SolidColorBrush x:Key="TextMuted"         Color="#64748B"/>
+        <SolidColorBrush x:Key="AccentBlue"        Color="#00B4D8"/>
+        <SolidColorBrush x:Key="AccentHover"       Color="#334D6E"/>
+        <SolidColorBrush x:Key="DangerRed"         Color="#EF4444"/>
+        <SolidColorBrush x:Key="SuccessGreen"      Color="#10B981"/>
+        <SolidColorBrush x:Key="WarningAmber"      Color="#F59E0B"/>
+
+        <!-- ── Themed TextBox Style ── -->
+        <Style x:Key="AuthTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background"      Value="{StaticResource InputBg}"/>
+            <Setter Property="Foreground"       Value="{StaticResource TextPrimary}"/>
+            <Setter Property="BorderBrush"      Value="{StaticResource CardBorder}"/>
+            <Setter Property="BorderThickness"  Value="1"/>
+            <Setter Property="Padding"          Value="14,10"/>
+            <Setter Property="FontSize"         Value="14"/>
+            <Setter Property="CaretBrush"       Value="{StaticResource AccentBlue}"/>
+            <Setter Property="Height"           Value="44"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- ── Themed PasswordBox Style ── -->
+        <Style x:Key="AuthPasswordStyle" TargetType="PasswordBox">
+            <Setter Property="Background"      Value="{StaticResource InputBg}"/>
+            <Setter Property="Foreground"       Value="{StaticResource TextPrimary}"/>
+            <Setter Property="BorderBrush"      Value="{StaticResource CardBorder}"/>
+            <Setter Property="BorderThickness"  Value="1"/>
+            <Setter Property="Padding"          Value="14,10"/>
+            <Setter Property="FontSize"         Value="14"/>
+            <Setter Property="CaretBrush"       Value="{StaticResource AccentBlue}"/>
+            <Setter Property="Height"           Value="44"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+
+    <!-- Full-screen centered layout -->
+    <Grid Background="{StaticResource PanelBg}">
+
+        <!-- Centered Registration Card -->
+        <Border Width="460"
+                Background="{StaticResource CardBg}"
+                BorderBrush="{StaticResource CardBorder}"
+                BorderThickness="1"
+                CornerRadius="16"
+                Padding="40,32"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center">
+            <Border.Effect>
+                <DropShadowEffect Color="#000000" Opacity="0.3" BlurRadius="30" ShadowDepth="4"/>
+            </Border.Effect>
+
+            <StackPanel>
+
+                <!-- ── Logo / Branding ── -->
+                <TextBlock Text="🧪" FontSize="32"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,6"/>
+                <TextBlock Text="Create Account"
+                           FontSize="22" FontWeight="Bold"
+                           Foreground="{StaticResource TextPrimary}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Text="Register as a new laboratory staff member"
+                           FontSize="12"
+                           Foreground="{StaticResource TextMuted}"
+                           HorizontalAlignment="Center"
+                           Margin="0,4,0,20"/>
+
+                <!-- ── Security Notice: Role Assignment ── -->
+                <Border Background="#1A1628" CornerRadius="8"
+                        Padding="14,10" Margin="0,0,0,22"
+                        BorderBrush="#2D1B4E" BorderThickness="1">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🛡️" FontSize="14"
+                                   VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBlock TextWrapping="Wrap" FontSize="11.5"
+                                   Foreground="{StaticResource TextSecondary}">
+                            <Run Text="All new accounts are assigned the "
+                                 Foreground="{StaticResource TextMuted}"/>
+                            <Run Text="Technician"
+                                 FontWeight="Bold"
+                                 Foreground="{StaticResource WarningAmber}"/>
+                            <Run Text=" role. Only administrators can elevate roles."
+                                 Foreground="{StaticResource TextMuted}"/>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+
+                <!-- ── Divider ── -->
+                <Border Height="1" Background="{StaticResource CardBorder}" Margin="0,0,0,22"/>
+
+                <!-- ── First / Last Name Row ── -->
+                <Grid Margin="0,0,0,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="14"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="FIRST NAME"
+                                   FontSize="10.5" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextMuted}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtFirstName" Style="{StaticResource AuthTextBoxStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="LAST NAME"
+                                   FontSize="10.5" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextMuted}" Margin="0,0,0,6"/>
+                        <TextBox x:Name="TxtLastName" Style="{StaticResource AuthTextBoxStyle}"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- ── Email ── -->
+                <TextBlock Text="EMAIL ADDRESS"
+                           FontSize="10.5" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextMuted}" Margin="0,0,0,6"/>
+                <TextBox x:Name="TxtEmail"
+                         Style="{StaticResource AuthTextBoxStyle}"
+                         Margin="0,0,0,14"/>
+
+                <!-- ── Username ── -->
+                <TextBlock Text="USERNAME"
+                           FontSize="10.5" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextMuted}" Margin="0,0,0,6"/>
+                <TextBox x:Name="TxtUsername"
+                         Style="{StaticResource AuthTextBoxStyle}"
+                         Margin="0,0,0,14"/>
+
+                <!-- ── Password ── -->
+                <TextBlock Text="PASSWORD"
+                           FontSize="10.5" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextMuted}" Margin="0,0,0,6"/>
+                <PasswordBox x:Name="PwdPassword"
+                             Style="{StaticResource AuthPasswordStyle}"
+                             Margin="0,0,0,6"/>
+                <TextBlock Text="Minimum 8 characters: uppercase, lowercase, digit, and special character."
+                           FontSize="10.5"
+                           Foreground="{StaticResource TextMuted}"
+                           Margin="0,0,0,24"/>
+
+                <!-- ── Register Button ── -->
+                <Button x:Name="BtnRegister"
+                        Height="48" Cursor="Hand"
+                        Click="BtnRegister_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="RegisterBorder"
+                                    CornerRadius="10" Padding="20,0"
+                                    BorderThickness="0">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#047857" Offset="0"/>
+                                        <GradientStop Color="#10B981" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="RegisterBorder" Property="Opacity" Value="0.85"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="RegisterBorder" Property="Opacity" Value="0.5"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <TextBlock Text="Create Account"
+                               FontSize="15" FontWeight="SemiBold"
+                               Foreground="White"/>
+                </Button>
+
+                <!-- ── Status / Error Message ── -->
+                <TextBlock x:Name="TxtStatus"
+                           Text=""
+                           FontSize="12"
+                           Foreground="{StaticResource DangerRed}"
+                           HorizontalAlignment="Center"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           Margin="0,16,0,0"/>
+
+                <!-- ── Back to Login Link ── -->
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,20,0,0">
+                    <TextBlock Text="Already have an account?"
+                               FontSize="12.5"
+                               Foreground="{StaticResource TextMuted}"/>
+                    <TextBlock x:Name="LnkBackToLogin"
+                               Text=" Sign In"
+                               FontSize="12.5" FontWeight="SemiBold"
+                               Foreground="{StaticResource AccentBlue}"
+                               Cursor="Hand"
+                               MouseLeftButtonDown="LnkBackToLogin_Click">
+                        <TextBlock.TextDecorations>
+                            <TextDecoration Location="Underline">
+                                <TextDecoration.Pen>
+                                    <Pen Brush="{StaticResource AccentBlue}" Thickness="1"/>
+                                </TextDecoration.Pen>
+                            </TextDecoration>
+                        </TextBlock.TextDecorations>
+                    </TextBlock>
+                </StackPanel>
+
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
